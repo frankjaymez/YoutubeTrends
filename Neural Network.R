@@ -13,7 +13,6 @@ library(rjson)
 library(keras)
 library(ISLR)
 library(neuralnet)
-
 # General Goal: 
 # Get the top 5 most common video categorys in the US and try to predict them using our NN model
 
@@ -22,9 +21,8 @@ library(neuralnet)
 # Create a model with 5 input, 5 hidden and 5 output layers. 
 # Test accuracy results
 
-
 # Loading data in
-utube_us <- read.csv('C:/Users/Max/Desktop/Trending-Youtube-ML/USvideos.csv', 
+utube_us <- read.csv('C:/Users/JD/Desktop/Trending-Youtube-MLTrending-Youtube-ML/USvideos.csv', 
                      encoding="UTF-8",
                      stringsAsFactors=FALSE,
                      na.strings=c("", "NA"))
