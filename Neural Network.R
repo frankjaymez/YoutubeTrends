@@ -4,7 +4,6 @@ library(readr)
 library(stringr)
 library(ggplot2)
 library(tidytext)
-library(utube_us.table)
 library(wordcloud) #for visualizing word clouds
 library(qdap) #for word frequencies
 library(tm)
@@ -13,7 +12,8 @@ library(rjson)
 library(keras)
 library(ISLR)
 library(neuralnet)
-library(dplyr)
+
+install.packages("keras")
 # General Goal: 
 # Get the top 5 most common video categorys in the US and try to predict them using our NN model
 
@@ -108,15 +108,14 @@ test_labels <- to_categorical(as.numeric(test_labels)-1)
 # This Neural network is going to be used to visualize on our report. Still not finished
 nn <- neuralnet(category_id~views+likes+comment_count+dislikes,
                 data=train_data,
-                hidden=4,
+                hidden=5,
                 err.fct='sse',
                 linear.output=FALSE
                 )
 plot(nn)
 
-
 # This neural network is going to be used to test for accuracy and we will also use it's plot on the report. 
-model <- keras_model_sequential(layers = list(layer_dense(units = 16, activation = "relu", 
+model <- keras_model_sequential(layers = list(layer_dense(units = 5, activation = "relu", 
                                               input_shape = dim(train_data)[2]),
                                               layer_dense(units = ncol(train_labels), activation = "softmax")))
 
