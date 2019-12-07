@@ -136,6 +136,44 @@ history_earlystop <- fit(model,
                          validation_split = 0.2,
                          callbacks = list(early_stop))
 
+###################### K Fold Cross Validation
+
+for(i in 1:10){
+  train = sample(1:nrow(filtered_set), 0.8*nrow(filtered_set), replace = FALSE)
+  trainSet <- filtered_set[train,]
+  validSet <- filtered_set[-train,]
+  
+  model <- keras_model_sequential(layers = list(layer_dense(units = 5, activation = "relu", 
+                                                            input_shape = dim(train_data)[2]),
+                                                layer_dense(units = ncol(train_labels), activation = "softmax")))
+  
+  compile(model,
+          loss = 'categorical_crossentropy',
+          optimizer = 'adam',
+          metrics = 'accuracy')
+  
+  # Early stop function
+  early_stop <- callback_early_stopping(monitor = "val_loss", patience = 10)
+  
+  
+  history_earlystop <- fit(model,
+                           train_data, 
+                           train_labels, 
+                           epochs = 1000,
+                           batch_size = 32, 
+                           validation_split = 0.2,
+                           callbacks = list(early_stop))
+  
+  #model2 <- randomForest(category_id ~ ., data = trainSet, ntree = 500, mtry = 3, importance = TRUE)
+  
+  predTrain <- predict(model1, trainSet, type = "class")
+  #table(predTrain, trainset$category_id)
+  
+  predValid <- predict(model1, validSet, type = "class")
+  print(mean(predValid == validSet$category_id))
+  #table(predValid, validset$category_id)
+}
+
 # Plot the history
 plot(history, smooth=F)
 history
